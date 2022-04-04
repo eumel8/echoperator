@@ -12,10 +12,10 @@ RUN make build
 
 FROM alpine:3.14.0
 
-COPY --from=builder /go/src/echoperator/bin/echoperator /echoperator
-
-RUN useradd --create-home appuser
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
 WORKDIR /home/appuser
+
+COPY --from=builder /go/src/echoperator/bin/echoperator /home/appuser/echoperator
 USER appuser
 
-CMD [ "/echoperator" ]
+CMD [ "/home/appuser/echoperator" ]
