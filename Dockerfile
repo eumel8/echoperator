@@ -14,4 +14,8 @@ FROM alpine:3.14.0
 
 COPY --from=builder /go/src/echoperator/bin/echoperator /echoperator
 
+RUN useradd --create-home appuser
+WORKDIR /home/appuser
+USER appuser
+
 CMD [ "/echoperator" ]
