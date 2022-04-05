@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ otcrds ]
   pull_request:
-    branches: [ develop ]
+    branches: [ otcrds ]
     
 env:
   IMAGE_NAME: echooperator
