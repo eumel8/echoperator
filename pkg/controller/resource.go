@@ -11,7 +11,7 @@ import (
 var (
 	image      = string("ghcr.io/eumel8/echobusybox:latest")
 	user       = int64(1000)
-	privledged = bool(true)
+	privledged = bool(false)
 	readonly   = bool(true)
 )
 
