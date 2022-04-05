@@ -8,6 +8,13 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+var (
+	image      = string("ghcr.io/eumel8/echobusybox:latest")
+	user       = int64(1000)
+	privledged = bool(true)
+	readonly   = bool(true)
+)
+
 func createJob(newEcho *echov1alpha1.Echo, namespace string) *batchv1.Job {
 	return &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
@@ -74,7 +81,14 @@ func createJobSpec(name, namespace, msg string) batchv1.JobSpec {
 						Name:            name,
 						Image:           "ghcr.io/eumel8/echobusybox:latest",
 						Command:         []string{"echo", msg},
-						ImagePullPolicy: "IfNotPresent",
+						ImagePullPolicy: "Always",
+						SecurityContext: &corev1.SecurityContext{
+							AllowPrivilegeEscalation: &privledged,
+							Privileged:               &privledged,
+							ReadOnlyRootFilesystem:   &readonly,
+							RunAsGroup:               &user,
+							RunAsUser:                &user,
+						},
 					},
 				},
 				RestartPolicy: corev1.RestartPolicyNever,

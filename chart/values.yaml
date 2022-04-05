@@ -4,7 +4,7 @@ fullnameOverride: ""
 image:
   repository: ghcr.io/eumel8/echooperator
   pullPolicy: IfNotPresent
-  tag: develop
+  tag: otcrds
 
 env: production
 
@@ -29,7 +29,13 @@ monitoring:
   labels:
     release: monitoring
 
-resources: {}
+resources:
+  requests:
+    cpu: 10m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
 
 securityContext:
   allowPrivilegeEscalation: false
