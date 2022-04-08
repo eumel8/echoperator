@@ -3,9 +3,9 @@ package runner
 import (
 	"context"
 
+	"github.com/eumel8/echoperator/internal/config"
+	"github.com/eumel8/echoperator/pkg/controller"
 	"github.com/gotway/gotway/pkg/log"
-	"github.com/mmontes11/echoperator/internal/config"
-	"github.com/mmontes11/echoperator/pkg/controller"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/leaderelection"
