@@ -1,7 +1,7 @@
 package v1alpha1
 
 import (
-	"github.com/mmontes11/echoperator/pkg/echo"
+	"github.com/eumel8/echoperator/pkg/rds"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -10,8 +10,8 @@ import (
 
 var (
 	SchemeGroupVersion = schema.GroupVersion{
-		Group:   echo.GroupName,
-		Version: echo.V1alpha1,
+		Group:   rds.GroupName,
+		Version: rds.V1alpha1,
 	}
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
 	AddToScheme   = SchemeBuilder.AddToScheme
@@ -23,10 +23,10 @@ func Resource(resource string) schema.GroupResource {
 
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
-		&Echo{},
-		&EchoList{},
-		&ScheduledEcho{},
-		&ScheduledEchoList{},
+		&Rds{},
+		&RdsList{},
+		&ScheduledRds{},
+		&ScheduledRdsList{},
 	)
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 
