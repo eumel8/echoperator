@@ -9,7 +9,6 @@ import (
 type McspsV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	RdssGetter
-	ScheduledRdssGetter
 }
 
 // McspsV1alpha1Client is used to interact with features provided by the mcsps.io group.
@@ -19,10 +18,6 @@ type McspsV1alpha1Client struct {
 
 func (c *McspsV1alpha1Client) Rdss(namespace string) RdsInterface {
 	return newRdss(c, namespace)
-}
-
-func (c *McspsV1alpha1Client) ScheduledRdss(namespace string) ScheduledRdsInterface {
-	return newScheduledRdss(c, namespace)
 }
 
 // NewForConfig creates a new McspsV1alpha1Client for the given config.
