@@ -14,10 +14,6 @@ func (c *FakeMcspsV1alpha1) Rdss(namespace string) v1alpha1.RdsInterface {
 	return &FakeRdss{c, namespace}
 }
 
-func (c *FakeMcspsV1alpha1) ScheduledRdss(namespace string) v1alpha1.ScheduledRdsInterface {
-	return &FakeScheduledRdss{c, namespace}
-}
-
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeMcspsV1alpha1) RESTClient() rest.Interface {

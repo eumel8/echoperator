@@ -8,8 +8,6 @@ import (
 type Interface interface {
 	// Rdss returns a RdsInformer.
 	Rdss() RdsInformer
-	// ScheduledRdss returns a ScheduledRdsInformer.
-	ScheduledRdss() ScheduledRdsInformer
 }
 
 type version struct {
