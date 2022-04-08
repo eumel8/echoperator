@@ -25,8 +25,6 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&Rds{},
 		&RdsList{},
-		&ScheduledRds{},
-		&ScheduledRdsList{},
 	)
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 

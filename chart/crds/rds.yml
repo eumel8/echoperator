@@ -39,9 +39,9 @@ spec:
                   type: string
                 password:
                   type: string
-                backupstrategystarttime:
+                backupstarttime:
                   type: string
-                backupstrategykeepdays:
+                backupkeepdays:
                   type: integer
                 flavorref:
                   type: string
@@ -56,7 +56,6 @@ spec:
                 securitygroup:
                   type: string
               required:
-                - message
                 - datastoretype
                 - datastoreversion
                 - volumetype
@@ -65,8 +64,8 @@ spec:
                 - hareplicationmode
                 - port
                 - password
-                - backupstrategystarttime
-                - backupstrategykeepdays
+                - backupstarttime
+                - backupkeepdays
                 - flavorref
                 - region
                 - availabilityzone

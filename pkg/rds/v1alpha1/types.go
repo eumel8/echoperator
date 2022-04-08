@@ -6,45 +6,35 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 // +genclient:noStatus
 // +k8s:deepcopy-gen=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type Echo struct {
+type Rds struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata"`
-	Spec              EchoSpec `json:"spec"`
+	Spec              RdsSpec `json:"spec"`
 }
 
-type EchoSpec struct {
-	Message string `json:"message"`
+type RdsSpec struct {
+	Message           string `json:"message"`
+	Datastoretype     string `json:"datastoretype"`
+	Datastoreversion  string `json:"datastoreversion"`
+	Volumetype        string `json:"volumetype"`
+	Volumeversion     int    `json:"volumeversion"`
+	Hamode            string `json:"hamode"`
+	Hareplicationmode string `json:"hareplicationmode"`
+	Port              string `json:"port"`
+	Password          string `json:"password"`
+	Backupstarttime   string `json:"backupstarttime"`
+	Backupkeepdays    int    `json:"backupkeepdays"`
+	Flavorref         string `json:"flavorref"`
+	Region            string `json:"region"`
+	Availabilityzone  string `json:"Availabilityzone"`
+	Vpc               string `json:"vpc"`
+	Subnet            string `json:"subnet"`
+	Securitygroup     string `json:"securitygroup"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type EchoList struct {
+type RdsList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata"`
-	Items           []Echo `json:"items"`
-}
-
-// +genclient
-// +genclient:noStatus
-// +k8s:deepcopy-gen=true
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type ScheduledEcho struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata"`
-	Spec              ScheduledEchoSpec `json:"spec"`
-}
-
-func (e *ScheduledEcho) HasChanged(other *ScheduledEcho) bool {
-	return e.Spec.Message != other.Spec.Message || e.Spec.Schedule != other.Spec.Schedule
-}
-
-type ScheduledEchoSpec struct {
-	Message  string `json:"message"`
-	Schedule string `json:"schedule"`
-}
-
-// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type ScheduledEchoList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata"`
-	Items           []ScheduledEcho `json:"items"`
+	Items           []Rds `json:"items"`
 }
