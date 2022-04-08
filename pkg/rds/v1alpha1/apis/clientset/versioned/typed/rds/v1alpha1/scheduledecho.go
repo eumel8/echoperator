@@ -38,7 +38,7 @@ type scheduledRdss struct {
 }
 
 // newScheduledRdss returns a ScheduledRdss
-func newScheduledRdss(c *MmontesV1alpha1Client, namespace string) *scheduledRdss {
+func newScheduledRdss(c *McspsV1alpha1Client, namespace string) *scheduledRdss {
 	return &scheduledRdss{
 		client: c.RESTClient(),
 		ns:     namespace,

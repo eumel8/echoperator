@@ -44,13 +44,13 @@ func NewFilteredRdsInformer(client versioned.Interface, namespace string, resync
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.MmontesV1alpha1().Rdss(namespace).List(context.TODO(), options)
+				return client.McspsV1alpha1().Rdss(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.MmontesV1alpha1().Rdss(namespace).Watch(context.TODO(), options)
+				return client.McspsV1alpha1().Rdss(namespace).Watch(context.TODO(), options)
 			},
 		},
 		&rdsv1alpha1.Rds{},
