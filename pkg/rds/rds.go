@@ -5,5 +5,5 @@ const (
 
 	V1alpha1 = "v1alpha1"
 
-	RdsKind          string = "Rds"
+	RdsKind string = "Rds"
 )

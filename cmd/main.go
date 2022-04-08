@@ -10,10 +10,10 @@ import (
 	"github.com/gotway/gotway/pkg/log"
 	"github.com/gotway/gotway/pkg/metrics"
 
-	"github.com/mmontes11/echoperator/internal/config"
-	"github.com/mmontes11/echoperator/internal/runner"
-	"github.com/mmontes11/echoperator/pkg/controller"
-	echov1alpha1clientset "github.com/mmontes11/echoperator/pkg/echo/v1alpha1/apis/clientset/versioned"
+	"github.com/eumel8/echoperator/internal/config"
+	"github.com/eumel8/echoperator/internal/runner"
+	"github.com/eumel8/echoperator/pkg/controller"
+	echov1alpha1clientset "github.com/eumel8/echoperator/pkg/echo/v1alpha1/apis/clientset/versioned"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
