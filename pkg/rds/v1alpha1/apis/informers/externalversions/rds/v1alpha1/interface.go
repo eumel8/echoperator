@@ -25,10 +25,5 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 
 // Rdss returns a RdsInformer.
 func (v *version) Rdss() RdsInformer {
-	return &echoInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
-}
-
-// ScheduledRdss returns a ScheduledRdsInformer.
-func (v *version) ScheduledRdss() ScheduledRdsInformer {
-	return &scheduledRdsInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+	return &rdsInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

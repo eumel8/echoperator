@@ -37,9 +37,6 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 	// Group=mcsps.de, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("rdss"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Mcsps().V1alpha1().Rdss().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("scheduledrdss"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Mcsps().V1alpha1().ScheduledRdss().Informer()}, nil
-
 	}
 
 	return nil, fmt.Errorf("no informer found for %v", resource)

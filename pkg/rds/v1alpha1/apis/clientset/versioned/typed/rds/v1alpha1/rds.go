@@ -20,8 +20,8 @@ type RdssGetter interface {
 
 // RdsInterface has methods to work with Rds resources.
 type RdsInterface interface {
-	Create(ctx context.Context, echo *v1alpha1.Rds, opts v1.CreateOptions) (*v1alpha1.Rds, error)
-	Update(ctx context.Context, echo *v1alpha1.Rds, opts v1.UpdateOptions) (*v1alpha1.Rds, error)
+	Create(ctx context.Context, rds *v1alpha1.Rds, opts v1.CreateOptions) (*v1alpha1.Rds, error)
+	Update(ctx context.Context, rds *v1alpha1.Rds, opts v1.UpdateOptions) (*v1alpha1.Rds, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
 	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Rds, error)
@@ -31,26 +31,26 @@ type RdsInterface interface {
 	RdsExpansion
 }
 
-// echos implements RdsInterface
-type echos struct {
+// rdss implements RdsInterface
+type rdss struct {
 	client rest.Interface
 	ns     string
 }
 
 // newRdss returns a Rdss
-func newRdss(c *McspsV1alpha1Client, namespace string) *echos {
-	return &echos{
+func newRdss(c *McspsV1alpha1Client, namespace string) *rdss {
+	return &rdss{
 		client: c.RESTClient(),
 		ns:     namespace,
 	}
 }
 
-// Get takes name of the echo, and returns the corresponding echo object, and an error if there is any.
-func (c *echos) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Rds, err error) {
+// Get takes name of the rds, and returns the corresponding rds object, and an error if there is any.
+func (c *rdss) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Rds, err error) {
 	result = &v1alpha1.Rds{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
 		Do(ctx).
@@ -59,7 +59,7 @@ func (c *echos) Get(ctx context.Context, name string, options v1.GetOptions) (re
 }
 
 // List takes label and field selectors, and returns the list of Rdss that match those selectors.
-func (c *echos) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.RdsList, err error) {
+func (c *rdss) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.RdsList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -67,7 +67,7 @@ func (c *echos) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1
 	result = &v1alpha1.RdsList{}
 	err = c.client.Get().
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Do(ctx).
@@ -75,8 +75,8 @@ func (c *echos) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1
 	return
 }
 
-// Watch returns a watch.Interface that watches the requested echos.
-func (c *echos) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+// Watch returns a watch.Interface that watches the requested rdss.
+func (c *rdss) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -84,44 +84,44 @@ func (c *echos) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface
 	opts.Watch = true
 	return c.client.Get().
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Watch(ctx)
 }
 
-// Create takes the representation of a echo and creates it.  Returns the server's representation of the echo, and an error, if there is any.
-func (c *echos) Create(ctx context.Context, echo *v1alpha1.Rds, opts v1.CreateOptions) (result *v1alpha1.Rds, err error) {
+// Create takes the representation of a rds and creates it.  Returns the server's representation of the rds, and an error, if there is any.
+func (c *rdss) Create(ctx context.Context, rds *v1alpha1.Rds, opts v1.CreateOptions) (result *v1alpha1.Rds, err error) {
 	result = &v1alpha1.Rds{}
 	err = c.client.Post().
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(echo).
+		Body(rds).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Update takes the representation of a echo and updates it. Returns the server's representation of the echo, and an error, if there is any.
-func (c *echos) Update(ctx context.Context, echo *v1alpha1.Rds, opts v1.UpdateOptions) (result *v1alpha1.Rds, err error) {
+// Update takes the representation of a rds and updates it. Returns the server's representation of the rds, and an error, if there is any.
+func (c *rdss) Update(ctx context.Context, rds *v1alpha1.Rds, opts v1.UpdateOptions) (result *v1alpha1.Rds, err error) {
 	result = &v1alpha1.Rds{}
 	err = c.client.Put().
 		Namespace(c.ns).
-		Resource("echos").
-		Name(echo.Name).
+		Resource("rdss").
+		Name(rds.Name).
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(echo).
+		Body(rds).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Delete takes name of the echo and deletes it. Returns an error if one occurs.
-func (c *echos) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+// Delete takes name of the rds and deletes it. Returns an error if one occurs.
+func (c *rdss) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		Name(name).
 		Body(&opts).
 		Do(ctx).
@@ -129,14 +129,14 @@ func (c *echos) Delete(ctx context.Context, name string, opts v1.DeleteOptions) 
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *echos) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *rdss) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	var timeout time.Duration
 	if listOpts.TimeoutSeconds != nil {
 		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		VersionedParams(&listOpts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Body(&opts).
@@ -144,12 +144,12 @@ func (c *echos) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, lis
 		Error()
 }
 
-// Patch applies the patch and returns the patched echo.
-func (c *echos) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Rds, err error) {
+// Patch applies the patch and returns the patched rds.
+func (c *rdss) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Rds, err error) {
 	result = &v1alpha1.Rds{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
-		Resource("echos").
+		Resource("rdss").
 		Name(name).
 		SubResource(subresources...).
 		VersionedParams(&opts, scheme.ParameterCodec).
