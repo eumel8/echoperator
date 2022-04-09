@@ -13,7 +13,7 @@ import (
 	"github.com/eumel8/echoperator/internal/config"
 	"github.com/eumel8/echoperator/internal/runner"
 	"github.com/eumel8/echoperator/pkg/controller"
-	rdsv1alpha1clientset "github.com/eumel8/rdsperator/pkg/rds/v1alpha1/apis/clientset/versioned"
+	rdsv1alpha1clientset "github.com/eumel8/echoperator/pkg/rds/v1alpha1/apis/clientset/versioned"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
