@@ -15,55 +15,20 @@ var (
 	readonly   = bool(true)
 )
 
-func createJob(newEcho *rdsv1alpha1.Echo, namespace string) *batchv1.Job {
+func createJob(newRds *rdsv1alpha1.Rds, namespace string) *batchv1.Job {
 	return &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      newEcho.ObjectMeta.Name,
+			Name:      newRds.ObjectMeta.Name,
 			Namespace: namespace,
 			Labels:    make(map[string]string),
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(
-					newEcho,
-					rdsv1alpha1.SchemeGroupVersion.WithKind(rds.EchoKind),
+					newRds,
+					rdsv1alpha1.SchemeGroupVersion.WithKind(rds.RdsKind),
 				),
 			},
 		},
-		Spec: createJobSpec(newEcho.Name, namespace, newEcho.Spec.Message),
-	}
-}
-
-func createCronJob(
-	newScheduledEcho *rdsv1alpha1.ScheduledEcho,
-	namespace string,
-) *batchv1.CronJob {
-	return &batchv1.CronJob{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      newScheduledEcho.ObjectMeta.Name,
-			Namespace: namespace,
-			Labels:    make(map[string]string),
-			OwnerReferences: []metav1.OwnerReference{
-				*metav1.NewControllerRef(
-					newScheduledEcho,
-					rdsv1alpha1.SchemeGroupVersion.WithKind(rds.ScheduledEchoKind),
-				),
-			},
-		},
-		Spec: batchv1.CronJobSpec{
-			Schedule:          newScheduledEcho.Spec.Schedule,
-			ConcurrencyPolicy: batchv1.ForbidConcurrent,
-			JobTemplate: batchv1.JobTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					GenerateName: newScheduledEcho.Name + "-",
-					Namespace:    namespace,
-					Labels:       make(map[string]string),
-				},
-				Spec: createJobSpec(
-					newScheduledEcho.Name,
-					namespace,
-					newScheduledEcho.Spec.Message,
-				),
-			},
-		},
+		Spec: createJobSpec(newRds.Name, namespace, newRds.Spec.Message),
 	}
 }
 

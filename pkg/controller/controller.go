@@ -22,10 +22,8 @@ import (
 type Controller struct {
 	kubeClientSet kubernetes.Interface
 
-	rdsInformer           cache.SharedIndexInformer
-	jobInformer           cache.SharedIndexInformer
-	scheduledEchoInformer cache.SharedIndexInformer
-	cronjobInformer       cache.SharedIndexInformer
+	rdsInformer cache.SharedIndexInformer
+	jobInformer cache.SharedIndexInformer
 
 	queue workqueue.RateLimitingInterface
 
@@ -43,7 +41,6 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 	c.logger.Info("starting informers")
 	for _, i := range []cache.SharedIndexInformer{
 		c.rdsInformer,
-		c.scheduledEchoInformer,
 		c.jobInformer,
 		c.cronjobInformer,
 	} {
@@ -53,7 +50,6 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 	c.logger.Info("waiting for informer caches to sync")
 	if !cache.WaitForCacheSync(ctx.Done(), []cache.InformerSynced{
 		c.rdsInformer.HasSynced,
-		c.scheduledEchoInformer.HasSynced,
 		c.jobInformer.HasSynced,
 		c.cronjobInformer.HasSynced,
 	}...) {
@@ -76,7 +72,7 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 	return nil
 }
 
-func (c *Controller) addEcho(obj interface{}) {
+func (c *Controller) addRds(obj interface{}) {
 	c.logger.Debug("adding rds")
 	rds, ok := obj.(*rdsv1alpha1.Rds)
 	if !ok {
@@ -84,7 +80,7 @@ func (c *Controller) addEcho(obj interface{}) {
 		return
 	}
 	c.queue.Add(event{
-		eventType: addEcho,
+		eventType: addRds,
 		newObj:    rds.DeepCopy(),
 	})
 }
@@ -123,7 +119,7 @@ func New(
 	}
 
 	rdsInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
-		AddFunc: ctrl.addEcho,
+		AddFunc: ctrl.addRds,
 	})
 
 	return ctrl
