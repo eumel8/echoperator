@@ -13,7 +13,7 @@ import (
 	"github.com/eumel8/echoperator/internal/config"
 	"github.com/eumel8/echoperator/internal/runner"
 	"github.com/eumel8/echoperator/pkg/controller"
-	echov1alpha1clientset "github.com/eumel8/echoperator/pkg/echo/v1alpha1/apis/clientset/versioned"
+	rdsv1alpha1clientset "github.com/eumel8/rdsperator/pkg/rds/v1alpha1/apis/clientset/versioned"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -43,14 +43,14 @@ func main() {
 	if err != nil {
 		logger.Fatal("error getting kubernetes client ", err)
 	}
-	echov1alpha1ClientSet, err := echov1alpha1clientset.NewForConfig(restConfig)
+	rdsv1alpha1ClientSet, err := rdsv1alpha1clientset.NewForConfig(restConfig)
 	if err != nil {
-		logger.Fatal("error creating echo client ", err)
+		logger.Fatal("error creating rds client ", err)
 	}
 
 	ctrl := controller.New(
 		kubeClientSet,
-		echov1alpha1ClientSet,
+		rdsv1alpha1ClientSet,
 		config.Namespace,
 		logger.WithField("type", "controller"),
 	)
