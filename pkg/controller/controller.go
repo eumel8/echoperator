@@ -42,7 +42,6 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 	for _, i := range []cache.SharedIndexInformer{
 		c.rdsInformer,
 		c.jobInformer,
-		c.cronjobInformer,
 	} {
 		go i.Run(ctx.Done())
 	}
@@ -51,7 +50,6 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 	if !cache.WaitForCacheSync(ctx.Done(), []cache.InformerSynced{
 		c.rdsInformer.HasSynced,
 		c.jobInformer.HasSynced,
-		c.cronjobInformer.HasSynced,
 	}...) {
 		err := errors.New("failed to wait for informers caches to sync")
 		utilruntime.HandleError(err)
@@ -100,16 +98,14 @@ func New(
 
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactory(kubeClientSet, 10*time.Second)
 	jobInformer := kubeInformerFactory.Batch().V1().Jobs().Informer()
-	cronjobInformer := kubeInformerFactory.Batch().V1().CronJobs().Informer()
 
 	queue := workqueue.NewRateLimitingQueue(workqueue.DefaultControllerRateLimiter())
 
 	ctrl := &Controller{
 		kubeClientSet: kubeClientSet,
 
-		rdsInformer:     rdsInformer,
-		jobInformer:     jobInformer,
-		cronjobInformer: cronjobInformer,
+		rdsInformer: rdsInformer,
+		jobInformer: jobInformer,
 
 		queue: queue,
 
