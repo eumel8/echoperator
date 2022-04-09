@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	echov1alpha1 "github.com/mmontes11/echoperator/pkg/echo/v1alpha1"
+	rdsv1alpha1 "github.com/eumel8/echoperator/pkg/rds/v1alpha1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/tools/cache"
 
@@ -48,22 +48,14 @@ func (c *Controller) processEvent(ctx context.Context, obj interface{}) error {
 		return nil
 	}
 	switch event.eventType {
-	case addEcho:
-		return c.processAddEcho(ctx, event.newObj.(*echov1alpha1.Echo))
-	case addScheduledEcho:
-		return c.processAddScheduledEcho(ctx, event.newObj.(*echov1alpha1.ScheduledEcho))
-	case updateScheduledEcho:
-		return c.processUpdateScheduledEcho(
-			ctx,
-			event.oldObj.(*echov1alpha1.ScheduledEcho),
-			event.newObj.(*echov1alpha1.ScheduledEcho),
-		)
+	case addRds:
+		return c.processAddRds(ctx, event.newObj.(*rdsv1alpha1.Rds))
 	}
 	return nil
 }
 
-func (c *Controller) processAddEcho(ctx context.Context, echo *echov1alpha1.Echo) error {
-	job := createJob(echo, c.namespace)
+func (c *Controller) processAddRds(ctx context.Context, rds *rdsv1alpha1.Rds) error {
+	job := createJob(rds, c.namespace)
 	exists, err := resourceExists(job, c.jobInformer.GetIndexer())
 	if err != nil {
 		return fmt.Errorf("error checking job existence %v", err)
@@ -76,42 +68,6 @@ func (c *Controller) processAddEcho(ctx context.Context, echo *echov1alpha1.Echo
 	_, err = c.kubeClientSet.BatchV1().
 		Jobs(c.namespace).
 		Create(ctx, job, metav1.CreateOptions{})
-	return err
-}
-
-func (c *Controller) processAddScheduledEcho(
-	ctx context.Context,
-	scheduledEcho *echov1alpha1.ScheduledEcho,
-) error {
-	cronjob := createCronJob(scheduledEcho, c.namespace)
-	exists, err := resourceExists(cronjob, c.cronjobInformer.GetIndexer())
-	if err != nil {
-		return fmt.Errorf("error checking cronjobjob existence %v", err)
-	}
-	if exists {
-		c.logger.Debug("cronjob already exists, skipping")
-		return nil
-	}
-
-	_, err = c.kubeClientSet.BatchV1().
-		CronJobs(c.namespace).
-		Create(ctx, cronjob, metav1.CreateOptions{})
-	return err
-}
-
-func (c *Controller) processUpdateScheduledEcho(
-	ctx context.Context,
-	oldScheduledEcho, newScheduledEcho *echov1alpha1.ScheduledEcho,
-) error {
-	if !oldScheduledEcho.HasChanged(newScheduledEcho) {
-		c.logger.Debug("scheduled echo has not changed, skipping")
-		return nil
-	}
-	cronjob := createCronJob(newScheduledEcho, c.namespace)
-
-	_, err := c.kubeClientSet.BatchV1().
-		CronJobs(c.namespace).
-		Update(ctx, cronjob, metav1.UpdateOptions{})
 	return err
 }
 

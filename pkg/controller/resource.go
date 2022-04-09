@@ -1,8 +1,8 @@
 package controller
 
 import (
-	echo "github.com/mmontes11/echoperator/pkg/echo"
-	echov1alpha1 "github.com/mmontes11/echoperator/pkg/echo/v1alpha1"
+	rds "github.com/eumel8/echoperator/pkg/rds"
+	rdsv1alpha1 "github.com/eumel8/echoperator/pkg/rds/v1alpha1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -15,7 +15,7 @@ var (
 	readonly   = bool(true)
 )
 
-func createJob(newEcho *echov1alpha1.Echo, namespace string) *batchv1.Job {
+func createJob(newEcho *rdsv1alpha1.Echo, namespace string) *batchv1.Job {
 	return &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      newEcho.ObjectMeta.Name,
@@ -24,7 +24,7 @@ func createJob(newEcho *echov1alpha1.Echo, namespace string) *batchv1.Job {
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(
 					newEcho,
-					echov1alpha1.SchemeGroupVersion.WithKind(echo.EchoKind),
+					rdsv1alpha1.SchemeGroupVersion.WithKind(rds.EchoKind),
 				),
 			},
 		},
@@ -33,7 +33,7 @@ func createJob(newEcho *echov1alpha1.Echo, namespace string) *batchv1.Job {
 }
 
 func createCronJob(
-	newScheduledEcho *echov1alpha1.ScheduledEcho,
+	newScheduledEcho *rdsv1alpha1.ScheduledEcho,
 	namespace string,
 ) *batchv1.CronJob {
 	return &batchv1.CronJob{
@@ -44,7 +44,7 @@ func createCronJob(
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(
 					newScheduledEcho,
-					echov1alpha1.SchemeGroupVersion.WithKind(echo.ScheduledEchoKind),
+					rdsv1alpha1.SchemeGroupVersion.WithKind(rds.ScheduledEchoKind),
 				),
 			},
 		},
@@ -80,7 +80,7 @@ func createJobSpec(name, namespace, msg string) batchv1.JobSpec {
 					{
 						Name:            name,
 						Image:           "ghcr.io/eumel8/echobusybox:latest",
-						Command:         []string{"echo", msg},
+						Command:         []string{"rds", msg},
 						ImagePullPolicy: "Always",
 						SecurityContext: &corev1.SecurityContext{
 							AllowPrivilegeEscalation: &privledged,

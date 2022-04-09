@@ -7,9 +7,9 @@ import (
 
 	"github.com/gotway/gotway/pkg/log"
 
-	echov1alpha1 "github.com/mmontes11/echoperator/pkg/echo/v1alpha1"
-	echov1alpha1clientset "github.com/mmontes11/echoperator/pkg/echo/v1alpha1/apis/clientset/versioned"
-	echoinformers "github.com/mmontes11/echoperator/pkg/echo/v1alpha1/apis/informers/externalversions"
+	rdsv1alpha1 "github.com/eumel8/echoperator/pkg/rds/v1alpha1"
+	rdsv1alpha1clientset "github.com/eumel8/echoperator/pkg/rds/v1alpha1/apis/clientset/versioned"
+	rdsinformers "github.com/eumel8/echoperator/pkg/rds/v1alpha1/apis/informers/externalversions"
 
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -22,7 +22,7 @@ import (
 type Controller struct {
 	kubeClientSet kubernetes.Interface
 
-	echoInformer          cache.SharedIndexInformer
+	rdsInformer           cache.SharedIndexInformer
 	jobInformer           cache.SharedIndexInformer
 	scheduledEchoInformer cache.SharedIndexInformer
 	cronjobInformer       cache.SharedIndexInformer
@@ -42,7 +42,7 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 
 	c.logger.Info("starting informers")
 	for _, i := range []cache.SharedIndexInformer{
-		c.echoInformer,
+		c.rdsInformer,
 		c.scheduledEchoInformer,
 		c.jobInformer,
 		c.cronjobInformer,
@@ -52,7 +52,7 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 
 	c.logger.Info("waiting for informer caches to sync")
 	if !cache.WaitForCacheSync(ctx.Done(), []cache.InformerSynced{
-		c.echoInformer.HasSynced,
+		c.rdsInformer.HasSynced,
 		c.scheduledEchoInformer.HasSynced,
 		c.jobInformer.HasSynced,
 		c.cronjobInformer.HasSynced,
@@ -77,63 +77,30 @@ func (c *Controller) Run(ctx context.Context, numWorkers int) error {
 }
 
 func (c *Controller) addEcho(obj interface{}) {
-	c.logger.Debug("adding echo")
-	echo, ok := obj.(*echov1alpha1.Echo)
+	c.logger.Debug("adding rds")
+	rds, ok := obj.(*rdsv1alpha1.Rds)
 	if !ok {
 		c.logger.Errorf("unexpected object %v", obj)
 		return
 	}
 	c.queue.Add(event{
 		eventType: addEcho,
-		newObj:    echo.DeepCopy(),
-	})
-}
-
-func (c *Controller) addScheduledEcho(obj interface{}) {
-	c.logger.Debug("adding scheduled echo")
-	scheduledEcho, ok := obj.(*echov1alpha1.ScheduledEcho)
-	if !ok {
-		c.logger.Errorf("unexpected object %v", obj)
-		return
-	}
-	c.queue.Add(event{
-		eventType: addScheduledEcho,
-		newObj:    scheduledEcho.DeepCopy(),
-	})
-}
-
-func (c *Controller) updateScheduledEcho(oldObj, newObj interface{}) {
-	c.logger.Debug("updating scheduled echo")
-	oldScheduledEcho, ok := oldObj.(*echov1alpha1.ScheduledEcho)
-	if !ok {
-		c.logger.Errorf("unexpected new object %v", newObj)
-		return
-	}
-	scheduledEcho, ok := newObj.(*echov1alpha1.ScheduledEcho)
-	if !ok {
-		c.logger.Errorf("unexpected new object %v", newObj)
-		return
-	}
-	c.queue.Add(event{
-		eventType: updateScheduledEcho,
-		oldObj:    oldScheduledEcho.DeepCopy(),
-		newObj:    scheduledEcho.DeepCopy(),
+		newObj:    rds.DeepCopy(),
 	})
 }
 
 func New(
 	kubeClientSet kubernetes.Interface,
-	echoClientSet echov1alpha1clientset.Interface,
+	rdsClientSet rdsv1alpha1clientset.Interface,
 	namespace string,
 	logger log.Logger,
 ) *Controller {
 
-	echoInformerFactory := echoinformers.NewSharedInformerFactory(
-		echoClientSet,
+	rdsInformerFactory := rdsinformers.NewSharedInformerFactory(
+		rdsClientSet,
 		10*time.Second,
 	)
-	echoInformer := echoInformerFactory.Mmontes().V1alpha1().Echos().Informer()
-	scheduledechoInformer := echoInformerFactory.Mmontes().V1alpha1().ScheduledEchos().Informer()
+	rdsInformer := rdsInformerFactory.Mcsps().V1alpha1().Rdss().Informer()
 
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactory(kubeClientSet, 10*time.Second)
 	jobInformer := kubeInformerFactory.Batch().V1().Jobs().Informer()
@@ -144,10 +111,9 @@ func New(
 	ctrl := &Controller{
 		kubeClientSet: kubeClientSet,
 
-		echoInformer:          echoInformer,
-		jobInformer:           jobInformer,
-		scheduledEchoInformer: scheduledechoInformer,
-		cronjobInformer:       cronjobInformer,
+		rdsInformer:     rdsInformer,
+		jobInformer:     jobInformer,
+		cronjobInformer: cronjobInformer,
 
 		queue: queue,
 
@@ -156,12 +122,8 @@ func New(
 		logger: logger,
 	}
 
-	echoInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
+	rdsInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: ctrl.addEcho,
-	})
-	scheduledechoInformer.AddEventHandler(cache.ResourceEventHandlerFuncs{
-		AddFunc:    ctrl.addScheduledEcho,
-		UpdateFunc: ctrl.updateScheduledEcho,
 	})
 
 	return ctrl
