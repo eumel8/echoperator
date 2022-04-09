@@ -1,8 +1,8 @@
 package v1alpha1
 
 import (
-	"github.com/eumel8/echoperator/pkg/echo/v1alpha1/apis/clientset/versioned/scheme"
 	v1alpha1 "github.com/eumel8/echoperator/pkg/rds/v1alpha1"
+	"github.com/eumel8/echoperator/pkg/rds/v1alpha1/apis/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 
