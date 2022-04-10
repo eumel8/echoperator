@@ -10,7 +10,7 @@ COPY . .
 
 RUN make build
 
-FROM alpine:3.18
+FROM alpine:3.15
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
 WORKDIR /home/appuser
