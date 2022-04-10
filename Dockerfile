@@ -1,4 +1,4 @@
-FROM golang:1.16.6-alpine3.14 AS builder
+FROM golang:1.18-alpine AS builder
 
 RUN apk update && \
     apk add --no-cache --update make bash git ca-certificates && \
@@ -10,7 +10,7 @@ COPY . .
 
 RUN make build
 
-FROM alpine:3.14.0
+FROM alpine:3.18
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
 WORKDIR /home/appuser
