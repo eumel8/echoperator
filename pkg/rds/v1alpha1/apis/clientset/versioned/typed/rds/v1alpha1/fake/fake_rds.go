@@ -18,9 +18,9 @@ type FakeRdss struct {
 	ns   string
 }
 
-var rdssResource = schema.GroupVersionResource{Group: "mcsps.de", Version: "v1alpha1", Resource: "rdss"}
+var rdssResource = schema.GroupVersionResource{Group: "otc.mcsps.de", Version: "v1alpha1", Resource: "rdss"}
 
-var rdssKind = schema.GroupVersionKind{Group: "mcsps.de", Version: "v1alpha1", Kind: "Rds"}
+var rdssKind = schema.GroupVersionKind{Group: "otc.mcsps.de", Version: "v1alpha1", Kind: "Rds"}
 
 // Get takes name of the rds, and returns the corresponding rds object, and an error if there is any.
 func (c *FakeRdss) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Rds, err error) {

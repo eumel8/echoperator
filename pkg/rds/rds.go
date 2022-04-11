@@ -1,7 +1,7 @@
 package rds
 
 const (
-	GroupName = "mcsps.de"
+	GroupName = "otc.mcsps.de"
 
 	V1alpha1 = "v1alpha1"
 

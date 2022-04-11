@@ -1,9 +1,8 @@
-apiVersion: mcsps.de/v1alpha1
+apiVersion: otc.mcsps.de/v1alpha1
 kind: Rds
 metadata:
   name: my-rds
 spec:
-  message: "Hola, 世界!"
   datastoretype: "MySQL"
   datastoreversion: "8.0"
   volumetype: "COMMON"
