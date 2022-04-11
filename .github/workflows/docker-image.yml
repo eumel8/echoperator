@@ -40,8 +40,11 @@ jobs:
         docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
         docker push $IMAGE_ID:$VERSION
 
-    - name: Send GitHub Action trigger data to Slack workflow
-      id: slack
-      uses: slackapi/slack-github-action@v1.18.0
+    - name: slack - GitHub Actions Slack integration
+      uses: act10ns/slack@v1.5.0
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      with: 
+        status: ${{ job.status }}
+        channel: '#dt-paas-alerts-test-2'
+        message: Deploying {{ env.GITHUB_REF_NAME }} branch
