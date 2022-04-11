@@ -28,7 +28,7 @@ func createJob(newRds *rdsv1alpha1.Rds, namespace string) *batchv1.Job {
 				),
 			},
 		},
-		Spec: createJobSpec(newRds.Name, namespace, newRds.Spec.Message),
+		Spec: createJobSpec(newRds.Name, namespace, newRds.Spec.Flavorref),
 	}
 }
 
@@ -45,7 +45,7 @@ func createJobSpec(name, namespace, msg string) batchv1.JobSpec {
 					{
 						Name:            name,
 						Image:           "ghcr.io/eumel8/echobusybox:latest",
-						Command:         []string{"rds", msg},
+						Command:         []string{"echo", msg},
 						ImagePullPolicy: "Always",
 						SecurityContext: &corev1.SecurityContext{
 							AllowPrivilegeEscalation: &privledged,
