@@ -17,7 +17,7 @@ type RdsSpec struct {
 	Datastoretype     string `json:"datastoretype"`
 	Datastoreversion  string `json:"datastoreversion"`
 	Volumetype        string `json:"volumetype"`
-	Volumeversion     int    `json:"volumeversion"`
+	Volumesize        int    `json:"volumesize"`
 	Hamode            string `json:"hamode"`
 	Hareplicationmode string `json:"hareplicationmode"`
 	Port              string `json:"port"`
