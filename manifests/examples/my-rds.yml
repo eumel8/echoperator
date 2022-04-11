@@ -11,7 +11,7 @@ spec:
   hamode: "Ha"
   hareplicationmode: "semisync"
   port: "3306"
-  password: "A12345678+
+  password: "A12345678+"
   backupstarttime: "01:00-02:00"
   backupkeepdays: 10
   flavorref: "rds.mysql.c2.xlarge.ha"
