@@ -1,6 +1,0 @@
-apiVersion: mmontes.io/v1alpha1
-kind: Echo
-metadata:
-  name: hello-world
-spec:
-  message: "Hola, 世界!"
